@@ -1,0 +1,2 @@
+# goSEPA
+Go SEPA
