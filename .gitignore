@@ -4,6 +4,10 @@
 *.so
 *.dylib
 
+# debuging
+debug
+launch.json
+
 # Test binary, build with `go test -c`
 *.test
 

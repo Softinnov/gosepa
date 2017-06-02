@@ -1,0 +1,64 @@
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>VIR201705</MsgId>
+      <CreDtTm>2017-05-01T12:00:00</CreDtTm>
+      <NbOfTxs>3</NbOfTxs>
+      <CtrlSum>187654.31</CtrlSum>
+      <InitgPty>
+        <Nm>Franz Holzapfel GMBH</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>VIR201705</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <NbOfTxs>3</NbOfTxs>
+      <CtrlSum>187654.31</CtrlSum>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>SEPA</Cd>
+        </SvcLvl>
+      </PmtTpInf>
+      <ReqdExctnDt>2017-05-03</ReqdExctnDt>
+      <Dbtr>
+        <Nm>Franz Holzapfel GMBH</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>AT611904300234573201</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>BKAUATWW</BIC>
+        </FinInstnId>
+      </DbtrAgt>
+      <ChrgBr>SLEV</ChrgBr>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>F201705</InstrId>
+          <EndToEndId>F201705</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="EUR">70000</InstdAmt>
+        </Amt>
+        <Cdtr>
+          <Nm>DEF Electronics</Nm>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>GB29NWBK60161331926819</IBAN>
+          </Id>
+        </CdtrAcct>
+        <RgltryRptg>
+          <Dtls>
+            <Cd>150</Cd>
+          </Dtls>
+        </RgltryRptg>
+        <RmtInf>
+          <Ustrd>F201705</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>
