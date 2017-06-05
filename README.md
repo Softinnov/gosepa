@@ -2,10 +2,10 @@
 
 goSEPA is a sepa xml file generation example written in Go compatible with pain.002.001.03 schema (Customer Credit Transfer Initiation V03).
 
-## run the program
+## run the tests
 
 `
-go run main.go > test.xml
+go test -v
 `
 
 ## check validity
