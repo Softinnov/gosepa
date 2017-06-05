@@ -1,6 +1,11 @@
 package sepa
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"errors"
+	"math/big"
+	"time"
+)
 
 // Document is the SEPA format for the document containing all transfers
 type Document struct {
@@ -43,13 +48,24 @@ type TAmount struct {
 }
 
 // InitDoc fixes every constants in the document + emiter informations
-func (doc *Document) InitDoc(msgID string, creationDate string, executionDate string, emiterName string, emiterIBAN string, emiterBIC string) {
+func (doc *Document) InitDoc(msgID string, creationDate string, executionDate string, emiterName string, emiterIBAN string, emiterBIC string) error {
+	_, err := time.Parse("2006-01-02T15:04:05", creationDate) // format : AAAA-MM-JJTHH:HH:SS
+	if err != nil {
+		return err
+	}
+	_, err = time.Parse("2006-01-02", executionDate) // format : AAAA-MM-JJ
+	if err != nil {
+		return err
+	}
+	if !IsValid(emiterIBAN) {
+		return errors.New("Invalid IBAN")
+	}
 	doc.XMLNs = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"
 	doc.XMLxsi = "http://www.w3.org/2001/XMLSchema-instance"
 	doc.GroupheaderMsgID = msgID
 	doc.PaymentInfoID = msgID
-	doc.GroupheaderCreateDate = creationDate // format : AAAA-MM-JJTHH:HH:SS
-	doc.PaymentExecDate = executionDate      // format : AAAA-MM-JJ
+	doc.GroupheaderCreateDate = creationDate
+	doc.PaymentExecDate = executionDate
 	doc.GroupheaderEmiterName = emiterName
 	doc.PaymentEmiterName = emiterName
 	doc.PaymentEmiterIBAN = emiterIBAN
@@ -57,10 +73,17 @@ func (doc *Document) InitDoc(msgID string, creationDate string, executionDate st
 	doc.PaymentInfoMethod = "TRF" // always TRF
 	doc.PaymentTypeInfo = "SEPA"  // always SEPA
 	doc.PaymentCharge = "SLEV"    // always SLEV
+	return nil
 }
 
 // AddTransaction adds a transfer transaction and adjust the transaction number and the sum control
-func (doc *Document) AddTransaction(id string, amount float32, currency string, creditorName string, creditorIBAN string) {
+func (doc *Document) AddTransaction(id string, amount float32, currency string, creditorName string, creditorIBAN string) error {
+	if !IsValid(creditorIBAN) {
+		return errors.New("Invalid IBAN")
+	}
+	if amount != float32(int(amount*100))/100 {
+		return errors.New("Amount 2 decimals only")
+	}
 	doc.PaymentTransactions = append(doc.PaymentTransactions, Transaction{
 		TransacID:           id,
 		TransacIDe2e:        id,
@@ -74,6 +97,7 @@ func (doc *Document) AddTransaction(id string, amount float32, currency string, 
 	doc.PaymentInfoTransacNb++
 	doc.GroupheaderCtrlSum += amount
 	doc.PaymentInfoCtrlSum += amount
+	return nil
 }
 
 // Serialize returns the xml document in byte stream
@@ -84,4 +108,27 @@ func (doc *Document) Serialize() ([]byte, error) {
 // PrettySerialize returns the indented xml document in byte stream
 func (doc *Document) PrettySerialize() ([]byte, error) {
 	return xml.MarshalIndent(doc, "", "  ")
+}
+
+// IsValid IBAN
+func IsValid(iban string) bool {
+	i := new(big.Int)
+	t := big.NewInt(10)
+	if len(iban) < 4 || len(iban) > 34 {
+		return false
+	}
+	for _, v := range iban[4:] + iban[:4] {
+		switch {
+		case v >= 'A' && v <= 'Z':
+			ch := v - 'A' + 10
+			i.Add(i.Mul(i, t), big.NewInt(int64(ch/10)))
+			i.Add(i.Mul(i, t), big.NewInt(int64(ch%10)))
+		case v >= '0' && v <= '9':
+			i.Add(i.Mul(i, t), big.NewInt(int64(v-'0')))
+		case v == ' ':
+		default:
+			return false
+		}
+	}
+	return i.Mod(i, big.NewInt(97)).Int64() == 1
 }
