@@ -30,7 +30,7 @@ func TestGenerateSepaXML(t *testing.T) {
 		{"F201709", 40000, "EUR", "D4F Electronics", "LP29NWBK60161331926819"},
 	}
 
-	// for each transaction, we check that the cumul amount and number remains correct in header et payment block
+	// For each transaction, we check that the cumul amount and number of transactions remain correct in header and payment block
 	var cumul = float32(0)
 	var nb = 0
 	for count, transac := range TTest {

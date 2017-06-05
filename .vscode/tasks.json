@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "tasks": [
+        {
+            "taskName": "gorun",
+            "command": "go",
+            "args": ["run", "${file}"],
+            "isShellCommand": true,
+            "isBackground": true,
+            "problemMatcher": "$tsc-watch"
+        },
+        {
+            "taskName": "gobuild",
+            "command": "go",
+            "args": ["build"],
+            "isShellCommand": true,
+            "isBuildCommand": true
+        },
+        {
+            "taskName": "gotest",
+            "command": "go",
+            "args": ["test","-v"],
+            "isShellCommand": true,
+            "isTestCommand": true
+        }
+    ]
+}
