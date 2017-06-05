@@ -4,7 +4,7 @@ import "encoding/xml"
 import "fmt"
 import "log"
 
-// Document est le format SEPA pour le document contenant tous les virements
+// Document is the SEPA format for the document containing all transfers
 type Document struct {
 	XMLName               xml.Name      `xml:"Document"`
 	XMLNs                 string        `xml:"xmlns,attr"`
@@ -27,7 +27,7 @@ type Document struct {
 	PaymentTransactions   []Transaction `xml:"CstmrCdtTrfInitn>PmtInf>CdtTrfTxInf"`
 }
 
-// Transaction est le format SEPA d'un virement
+// Transaction is the transfer SEPA format
 type Transaction struct {
 	TransacID           string  `xml:"PmtId>InstrId"`
 	TransacIDe2e        string  `xml:"PmtId>EndToEndId"`
@@ -38,7 +38,7 @@ type Transaction struct {
 	TransacMotif        string  `xml:"RmtInf>Ustrd"`
 }
 
-// TAmount est le montant d'une transaction avec sa monnaie
+// TAmount is the transaction amount with its currency
 type TAmount struct {
 	Amount   float32 `xml:",chardata"`
 	Currency string  `xml:"Ccy,attr"`
