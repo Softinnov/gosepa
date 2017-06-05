@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>  </MsgId>
+      <CreDtTm>2011-04-13T17:46:19.000</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <CtrlSum>0</CtrlSum>
+      <InitgPty>
+        <Nm>fgfhfhgfj</Nm>
+        <PstlAdr>
+          <StrtNm>gfgfh</StrtNm>
+          <BldgNb>gdgdgd</BldgNb>
+          <PstCd>0ggfdg</PstCd>
+          <TwnNm>nnnn</TwnNm>
+          <Ctry>FR</Ctry>
+        </PstlAdr>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>SEPA</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>SEPA</Cd>
+        </SvcLvl>
+      </PmtTpInf>
+      <ReqdExctnDt>2011-04-13</ReqdExctnDt>
+      <Dbtr>
+        <Nm>FR711111111111</Nm>
+        <PstlAdr>
+          <Ctry>FR</Ctry>
+          <AdrLine>Times square</AdrLine>
+          <AdrLine>672022 strasbourg</AdrLine>
+        </PstlAdr>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>FR711111111111</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>PPPSSSDEPSX</BIC>
+        </FinInstnId>
+      </DbtrAgt>
+      <CdtTrfTxInf>
+        <PmtId>
+          <EndToEndId>504564545454</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="EUR">01500</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>PSSTFRPPMAR</BIC>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>xxxxxx</Nm>
+          <PstlAdr>
+            <Ctry>FR</Ctry>
+            <AdrLine>rur</AdrLine>
+            <AdrLine>0 ghfgfg</AdrLine>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>FR11111111111111111111148</IBAN>
+          </Id>
+        </CdtrAcct>
+      </CdtTrfTxInf>
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>

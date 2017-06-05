@@ -1,8 +1,6 @@
-package main
+package sepa
 
 import "encoding/xml"
-import "fmt"
-import "log"
 
 // Document is the SEPA format for the document containing all transfers
 type Document struct {
@@ -44,42 +42,46 @@ type TAmount struct {
 	Currency string  `xml:"Ccy,attr"`
 }
 
-func main() {
-	// Initialize doc example
-	doc := &Document{
-		XMLNs:                 "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03",
-		XMLxsi:                "http://www.w3.org/2001/XMLSchema-instance",
-		GroupheaderMsgID:      "VIR201705",
-		GroupheaderCreateDate: "2017-05-01T12:00:00", // format : AAAA-MM-JJTHH:HH:SS
-		GroupheaderTransacNb:  3,
-		GroupheaderCtrlSum:    187654.32,
-		GroupheaderEmiterName: "Franz Holzapfel GMBH",
-		PaymentInfoID:         "VIR201705",
-		PaymentInfoMethod:     "TRF",        // always TRF
-		PaymentInfoTransacNb:  3,            // same as GroupheaderTransacNb
-		PaymentInfoCtrlSum:    187654.32,    // same as GroupheaderCtrlSum
-		PaymentTypeInfo:       "SEPA",       // always SEPA
-		PaymentExecDate:       "2017-05-03", // format : AAAA-MM-JJ
-		PaymentEmiterName:     "Franz Holzapfel GMBH",
-		PaymentEmiterIBAN:     "AT611904300234573201",
-		PaymentEmiterBIC:      "BKAUATWW",
-		PaymentCharge:         "SLEV", // always SLEV
-	}
+// InitDoc fixes every constants in the document + emiter informations
+func (doc *Document) InitDoc(msgID string, creationDate string, executionDate string, emiterName string, emiterIBAN string, emiterBIC string) {
+	doc.XMLNs = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"
+	doc.XMLxsi = "http://www.w3.org/2001/XMLSchema-instance"
+	doc.GroupheaderMsgID = msgID
+	doc.PaymentInfoID = msgID
+	doc.GroupheaderCreateDate = creationDate // format : AAAA-MM-JJTHH:HH:SS
+	doc.PaymentExecDate = executionDate      // format : AAAA-MM-JJ
+	doc.GroupheaderEmiterName = emiterName
+	doc.PaymentEmiterName = emiterName
+	doc.PaymentEmiterIBAN = emiterIBAN
+	doc.PaymentEmiterBIC = emiterBIC
+	doc.PaymentInfoMethod = "TRF" // always TRF
+	doc.PaymentTypeInfo = "SEPA"  // always SEPA
+	doc.PaymentCharge = "SLEV"    // always SLEV
+}
 
+// AddTransaction adds a transfer transaction and adjust the transaction number and the sum control
+func (doc *Document) AddTransaction(id string, amount float32, currency string, creditorName string, creditorIBAN string) {
 	doc.PaymentTransactions = append(doc.PaymentTransactions, Transaction{
-		TransacID:           "F201705",
-		TransacIDe2e:        "F201705",
-		TransacAmount:       TAmount{Amount: 70000, Currency: "EUR"},
-		TransacCreditorName: "DEF Electronics",
-		TransacCreditorIBAN: "GB29NWBK60161331926819",
+		TransacID:           id,
+		TransacIDe2e:        id,
+		TransacMotif:        id,
+		TransacAmount:       TAmount{Amount: amount, Currency: currency},
+		TransacCreditorName: creditorName,
+		TransacCreditorIBAN: creditorIBAN,
 		TransacRegulatory:   "150", // always 150
-		TransacMotif:        "F201705",
 	})
+	doc.GroupheaderTransacNb++
+	doc.PaymentInfoTransacNb++
+	doc.GroupheaderCtrlSum += amount
+	doc.PaymentInfoCtrlSum += amount
+}
 
-	str, err := xml.MarshalIndent(doc, "", "  ")
-	//str, err := xml.Marshal(doc)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s\n", str)
+// Serialize returns the xml document in byte stream
+func (doc *Document) Serialize() ([]byte, error) {
+	return xml.Marshal(doc)
+}
+
+// PrettySerialize returns the indented xml document in byte stream
+func (doc *Document) PrettySerialize() ([]byte, error) {
+	return xml.MarshalIndent(doc, "", "  ")
 }
