@@ -1,4 +1,4 @@
-package sepa
+package gosepa
 
 import (
 	"encoding/xml"
