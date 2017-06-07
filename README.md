@@ -1,6 +1,6 @@
-# goSEPA
+# gosepa
 
-goSEPA is a sepa xml file generation example written in Go compatible with pain.002.001.03 schema (Customer Credit Transfer Initiation V03).
+gosepa is a sepa xml file generation example written in Go compatible with pain.002.001.03 schema (Customer Credit Transfer Initiation V03).
 
 ## run the tests
 
