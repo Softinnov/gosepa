@@ -15,12 +15,12 @@ type Document struct {
 	GroupheaderMsgID      string        `xml:"CstmrCdtTrfInitn>GrpHdr>MsgId"`
 	GroupheaderCreateDate string        `xml:"CstmrCdtTrfInitn>GrpHdr>CreDtTm"`
 	GroupheaderTransacNb  int           `xml:"CstmrCdtTrfInitn>GrpHdr>NbOfTxs"`
-	GroupheaderCtrlSum    float32       `xml:"CstmrCdtTrfInitn>GrpHdr>CtrlSum"`
+	GroupheaderCtrlSum    float64       `xml:"CstmrCdtTrfInitn>GrpHdr>CtrlSum"`
 	GroupheaderEmiterName string        `xml:"CstmrCdtTrfInitn>GrpHdr>InitgPty>Nm"`
 	PaymentInfoID         string        `xml:"CstmrCdtTrfInitn>PmtInf>PmtInfId"`
 	PaymentInfoMethod     string        `xml:"CstmrCdtTrfInitn>PmtInf>PmtMtd"`
 	PaymentInfoTransacNb  int           `xml:"CstmrCdtTrfInitn>PmtInf>NbOfTxs"`
-	PaymentInfoCtrlSum    float32       `xml:"CstmrCdtTrfInitn>PmtInf>CtrlSum"`
+	PaymentInfoCtrlSum    float64       `xml:"CstmrCdtTrfInitn>PmtInf>CtrlSum"`
 	PaymentTypeInfo       string        `xml:"CstmrCdtTrfInitn>PmtInf>PmtTpInf>SvcLvl>Cd"`
 	PaymentExecDate       string        `xml:"CstmrCdtTrfInitn>PmtInf>ReqdExctnDt"`
 	PaymentEmiterName     string        `xml:"CstmrCdtTrfInitn>PmtInf>Dbtr>Nm"`
@@ -43,7 +43,7 @@ type Transaction struct {
 
 // TAmount is the transaction amount with its currency
 type TAmount struct {
-	Amount   float32 `xml:",chardata"`
+	Amount   float64 `xml:",chardata"`
 	Currency string  `xml:"Ccy,attr"`
 }
 
@@ -77,11 +77,11 @@ func (doc *Document) InitDoc(msgID string, creationDate string, executionDate st
 }
 
 // AddTransaction adds a transfer transaction and adjust the transaction number and the sum control
-func (doc *Document) AddTransaction(id string, amount float32, currency string, creditorName string, creditorIBAN string) error {
+func (doc *Document) AddTransaction(id string, amount float64, currency string, creditorName string, creditorIBAN string) error {
 	if !IsValid(creditorIBAN) {
 		return errors.New("Invalid IBAN")
 	}
-	if amount != float32(int(amount*100))/100 {
+	if amount != float64(int64(amount*100))/100 {
 		return errors.New("Amount 2 decimals only")
 	}
 	doc.PaymentTransactions = append(doc.PaymentTransactions, Transaction{

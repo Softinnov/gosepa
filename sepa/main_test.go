@@ -60,7 +60,7 @@ func TestGenerateSepaXML(t *testing.T) {
 	// Transactions Test Array
 	type testTransac struct {
 		id         string
-		amount     float32
+		amount     float64
 		currency   string
 		debtorName string
 		debtorIban string
@@ -74,7 +74,8 @@ func TestGenerateSepaXML(t *testing.T) {
 	}
 
 	// For each transaction, we check that the cumul amount and number of transactions remain correct in header and payment block
-	var cumul = float32(0)
+	var cumul = float64(0)
+
 	var nb = 0
 	for count, transac := range TTest {
 		err = sepaDoc.AddTransaction(transac.id, transac.amount, transac.currency, transac.debtorName, transac.debtorIban)
