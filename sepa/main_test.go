@@ -5,6 +5,27 @@ import (
 	"testing"
 )
 
+func TestDecimalsNumber(t *testing.T) {
+	suite := []struct {
+		f float64
+		n int
+	}{
+		{0, 0},
+		{123.0, 0},
+		{144.2, 1},
+		{1.123456789, 9},
+		{3.1415900000, 5},
+		{-1250, 0},
+		{-252123.123, 3},
+	}
+	for _, s := range suite {
+		received := DecimalsNumber(s.f)
+		expected := s.n
+		if received != expected {
+			t.Errorf("Expected %v received %v", expected, received)
+		}
+	}
+}
 func TestGenerateSepaXML(t *testing.T) {
 
 	var err error
@@ -55,12 +76,6 @@ func TestGenerateSepaXML(t *testing.T) {
 	err = sepaDoc.AddTransaction("XXX", 1.234, "XXX", "XXX", "EE382200221020145685")
 	if err == nil {
 		t.Error("Exepected AddTransaction return an error for bad amount", "got", err)
-	}
-
-	// Add Transaction with amount 144.20 (float implementation will approximate this number to 144.199999999 internaly)
-	err = sepaDoc.AddTransaction("XXX", 144.20, "XXX", "XXX", "EE382200221020145685")
-	if err != nil {
-		t.Error("Expected AddTransaction accept 144.20 amount", "got", err)
 	}
 
 	// Transactions Test Array

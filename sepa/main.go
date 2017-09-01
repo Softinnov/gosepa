@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"errors"
 	"math/big"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -81,7 +83,7 @@ func (doc *Document) AddTransaction(id string, amount float64, currency string, 
 	if !IsValid(creditorIBAN) {
 		return errors.New("Invalid IBAN")
 	}
-	if amount != float64(int64(amount*100))/100 {
+	if DecimalsNumber(amount) > 2 {
 		return errors.New("Amount 2 decimals only")
 	}
 	doc.PaymentTransactions = append(doc.PaymentTransactions, Transaction{
@@ -131,4 +133,14 @@ func IsValid(iban string) bool {
 		}
 	}
 	return i.Mod(i, big.NewInt(97)).Int64() == 1
+}
+
+// DecimalsNumber returns the number of decimals in a float
+func DecimalsNumber(f float64) int {
+	s := strconv.FormatFloat(f, 'f', -1, 64)
+	p := strings.Split(s, ".")
+	if len(p) < 2 {
+		return 0
+	}
+	return len(p[1])
 }
