@@ -57,6 +57,12 @@ func TestGenerateSepaXML(t *testing.T) {
 		t.Error("Exepected AddTransaction return an error for bad amount", "got", err)
 	}
 
+	// Add Transaction with amount 144.20 (float implementation will approximate this number to 144.199999999 internaly)
+	err = sepaDoc.AddTransaction("XXX", 144.20, "XXX", "XXX", "EE382200221020145685")
+	if err != nil {
+		t.Error("Expected AddTransaction accept 144.20 amount", "got", err)
+	}
+
 	// Transactions Test Array
 	type testTransac struct {
 		id         string
