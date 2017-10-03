@@ -97,8 +97,25 @@ func (doc *Document) AddTransaction(id string, amount float64, currency string, 
 	})
 	doc.GroupheaderTransacNb++
 	doc.PaymentInfoTransacNb++
-	doc.GroupheaderCtrlSum += amount
-	doc.PaymentInfoCtrlSum += amount
+
+	amountCents, e := ToCents(amount)
+	if e != nil {
+		return errors.New("In AddTransaction can't convert amount in cents")
+	}
+	cumulCents, _ := ToCents(doc.GroupheaderCtrlSum)
+	if e != nil {
+		return errors.New("In AddTransaction can't convert control sum in cents")
+	}
+
+	cumulCents += amountCents
+
+	cumulEuro, _ := ToEuro(cumulCents)
+	if e != nil {
+		return errors.New("In AddTransaction can't convert cumul in euro")
+	}
+
+	doc.GroupheaderCtrlSum = cumulEuro
+	doc.PaymentInfoCtrlSum = cumulEuro
 	return nil
 }
 
@@ -143,4 +160,18 @@ func DecimalsNumber(f float64) int {
 		return 0
 	}
 	return len(p[1])
+}
+
+// ToCents returns the cents representation in int64
+func ToCents(f float64) (int64, error) {
+	s := strconv.FormatFloat(f, 'f', 2, 64)
+	sc := strings.Replace(s, ".", "", 1)
+	return strconv.ParseInt(sc, 10, 64)
+}
+
+// ToEuro returns the euro representation in float64
+func ToEuro(i int64) (float64, error) {
+	d := strconv.FormatInt(i, 10)
+	df := d[:len(d)-2] + "." + d[len(d)-2:]
+	return strconv.ParseFloat(df, 64)
 }
