@@ -60,7 +60,7 @@ func (doc *Document) InitDoc(msgID string, creationDate string, executionDate st
 		return err
 	}
 	if !IsValid(emiterIBAN) {
-		return errors.New("Invalid IBAN")
+		return errors.New("Invalid emiter IBAN")
 	}
 	doc.XMLNs = "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"
 	doc.XMLxsi = "http://www.w3.org/2001/XMLSchema-instance"
@@ -81,7 +81,7 @@ func (doc *Document) InitDoc(msgID string, creationDate string, executionDate st
 // AddTransaction adds a transfer transaction and adjust the transaction number and the sum control
 func (doc *Document) AddTransaction(id string, amount float64, currency string, creditorName string, creditorIBAN string) error {
 	if !IsValid(creditorIBAN) {
-		return errors.New("Invalid IBAN")
+		return errors.New("Invalid creditor IBAN")
 	}
 	if DecimalsNumber(amount) > 2 {
 		return errors.New("Amount 2 decimals only")
