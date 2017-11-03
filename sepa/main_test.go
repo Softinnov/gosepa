@@ -59,7 +59,7 @@ func TestGenerateSepaXML(t *testing.T) {
 	// Bad format for execution date, expecting AAAA-MM-JJ
 	err = sepaDoc.InitDoc("", "2017-05-01T22:45:03", "2017-05-01T22:45:03", "", "", "")
 	if err == nil {
-		t.Error("Expected InitDoc return an error for bad exection date format", "got", err)
+		t.Error("Expected InitDoc return an error for bad execution date format", "got", err)
 	}
 
 	// Bad IBAN
