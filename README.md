@@ -1,5 +1,7 @@
 # gosepa
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/softinnov/gosepa)](https://goreportcard.com/report/github.com/softinnov/gosepa)
+
 gosepa is a sepa xml file generator written in Go compatible with pain.002.001.03 schema (Customer Credit Transfer Initiation V03).
 
 This generator uses shortcuts to simplify the norm implementation : for example, there is only one id used for several differents references (I never have to deal with multiple references)
